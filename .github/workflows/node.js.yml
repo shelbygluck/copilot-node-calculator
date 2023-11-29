@@ -20,8 +20,3 @@ jobs:
       run: npm install
     - name: Run tests
       run: npm test
-    - name: Archive test results to GitHub Packages
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ github.ref_name }}-${{ github.run_id }}-${{ matrix.node-version }}-test-results
-        path: ./out/test-results.xml

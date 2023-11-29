@@ -1,4 +1,6 @@
 describe('Arithmetic', function () {
+    
+    // UNIT TESTS FOR VALIDATION
     describe('Validation', function () {
         it('rejects missing operation', function (done) {
             request.get('/arithmetic?operand1=21&operand2=21')
@@ -42,6 +44,7 @@ describe('Arithmetic', function () {
         });
     });
 
+    // UNIT TESTS FOR ADDITION
     describe('Addition', function () {
         it('adds two positive integers', function (done) {
             request.get('/arithmetic?operation=add&operand1=21&operand2=21')
@@ -93,9 +96,8 @@ describe('Arithmetic', function () {
         });
     });
 
-// TODO: Challenge #1
  
-
+    // UNIT TESTS FOR MULTIPLICATION
     describe('Multiplication', function () {
         it('multiplies two positive integers', function (done) {
             request.get('/arithmetic?operation=multiply&operand1=21&operand2=2')
@@ -147,6 +149,63 @@ describe('Arithmetic', function () {
         });
     });
 
-    // TODO: ADD UNIT TESTS FOR DIVISION
-
+    // UNIT TESTS FOR DIVISION
+    describe('Division', function () {
+        it('divides a positive integer by an integer factor ', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=42&operand2=2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 21 });
+                    done();
+                });
+        });
+        it('divides a negative integer by an integer factor ', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=-42&operand2=2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -21 });
+                    done();
+                });
+        });
+        it('divides a positive integer by a non-factor', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=21&operand2=42')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0.5 });
+                    done();
+                });
+        });
+        it('divides a positive integer by a negative integer', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=21&operand2=-42')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -0.5 });
+                    done();
+                });
+        });
+        it('divides zero by a positive integer', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=0&operand2=42')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('divides by zero', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=0.5&operand2=2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0.25 });
+                    done();
+                });
+        });
+        it('divides by zero', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=21&operand2=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: null });
+                    done();
+                });
+        });
+    });
 });
