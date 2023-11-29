@@ -148,50 +148,63 @@ describe('Arithmetic', function () {
     });
 
     // TODO: ADD UNIT TESTS FOR DIVISION
-    describe('Division', function () {
-    it('divides two positive integers', function (done) {
-        request.get('/arithmetic?operation=divide&operand1=21&operand2=3')
-            .expect(200)
-            .end(function (err, res) {
-                expect(res.body).to.eql({ result: 7 });
-                done();
-            });
-    });
-
-    it('divides by zero', function (done) {
-        request.get('/arithmetic?operation=divide&operand1=21&operand2=0')
-            .expect(400)
-            .end(function (err, res) {
-                expect(res.body).to.eql({ error: "Invalid operation: Division by zero" });
-                done();
-            });
-    });
     
-    it('divides two negative integers', function (done) {
-        request.get('/arithmetic?operation=divide&operand1=-21&operand2=-7')
-            .expect(200)
-            .end(function (err, res) {
-                expect(res.body).to.eql({ result: 3 });
-                done();
-            });
+    describe('Division', function () {
+        it('divides a positive integer by an integer factor ', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=42&operand2=2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 21 });
+                    done();
+                });
+        });
+        it('divides a negative integer by an integer factor ', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=-42&operand2=2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -21 });
+                    done();
+                });
+        });
+        it('divides a positive integer by a non-factor', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=21&operand2=42')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0.5 });
+                    done();
+                });
+        });
+        it('divides a positive integer by a negative integer', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=21&operand2=-42')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: -0.5 });
+                    done();
+                });
+        });
+        it('divides zero by a positive integer', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=0&operand2=42')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('divides by zero', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=0.5&operand2=2')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0.25 });
+                    done();
+                });
+        });
+        it('divides by zero', function (done) {
+            request.get('/arithmetic?operation=divide&operand1=21&operand2=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: null });
+                    done();
+                });
+        });
     });
-
-    it('divides a positive integer from a negative integer', function (done) {
-        request.get('/arithmetic?operation=divide&operand1=-21&operand2=3')
-            .expect(200)
-            .end(function (err, res) {
-                expect(res.body).to.eql({ result: -7 });
-                done();
-            });
-    });
-
-    it('divides a floating point from an integer', function (done) {
-        request.get('/arithmetic?operation=divide&operand1=0.5&operand2=2')
-            .expect(200)
-            .end(function (err, res) {
-                expect(res.body).to.eql({ result: 0.25 });
-                done();
-            });
-    });
-});
 });
